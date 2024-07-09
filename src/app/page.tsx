@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SignedIn, SignedOut, SignInButton, SignOutButton, useSession } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignOutButton, useOrganization, useSession } from "@clerk/nextjs";
 import Image from "next/image";
 import LandingPage from "@/components/LandingPage";
 import { CardWithForm } from "@/components/CardWithForm";
@@ -10,7 +10,8 @@ import { api } from "../../convex/_generated/api";
 import { Progress } from "@/components/ui/progress"
 
 export default function Home() {
-  const Tasks = useQuery(api.tasks.getTasks)
+  const { organization } = useOrganization();
+  const Tasks = useQuery(api.tasks.getTasks, organization?.id ? { orgId: organization.id } : 'skip')
   const createTask = useMutation(api.tasks.createTask)
   const session = useSession();
   return (
@@ -30,7 +31,9 @@ export default function Home() {
         })}
 
         <Button onClick={()=>{
+          if(!organization) return;
           createTask({
+            orgId: organization?.id,
             taskName: 'Interior Painting',
             taskCategory: 'Painting',
             dueDate: '12-10-2024',
@@ -42,9 +45,6 @@ export default function Home() {
             remarks: 'Complete soon',
           })
         }}>Create Task</Button>
-      <SignOutButton>
-        <Button>Sign out</Button>
-      </SignOutButton>
       </SignedIn>
       </div>
     </main>

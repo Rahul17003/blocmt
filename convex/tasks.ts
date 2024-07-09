@@ -3,6 +3,7 @@ import { ConvexError, v } from "convex/values";
 
 export const createTask = mutation({
     args: {
+        orgId: v.string(),
         taskName: v.string(),
         taskCategory: v.string(),
         dueDate: v.string(),
@@ -20,6 +21,7 @@ export const createTask = mutation({
         }
         const taskId = await ctx.db.insert("tasks",
             {
+                orgId: args.orgId,
                 taskName: args.taskName,
                 taskCategory: args.taskCategory,
                 dueDate: args.dueDate,
@@ -35,12 +37,16 @@ export const createTask = mutation({
 });
 
 export const getTasks = query({
-    args: {},
+    args: {
+        orgId: v.string()
+    },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
         if(!identity){
             return [];
         }
-        return ctx.db.query('tasks').collect()
+        return ctx.db.query('tasks').withIndex('by_orgId', q=>
+            q.eq('orgId', args.orgId)
+        ).collect();
     },
 });
