@@ -2,6 +2,12 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+    defaults: defineTable({
+        materialName: v.string(),
+        taskCategory: v.string(),
+        units: v.string(),
+    }),
+
     tasks: defineTable({
         orgId: v.string(),
         assignedTo: v.string(),
@@ -17,4 +23,9 @@ export default defineSchema({
         "by_orgId",
         ["orgId"]
     ),
+
+    users: defineTable({
+        tokenIdentifier: v.string(),
+    }),
+
 });

@@ -6,7 +6,7 @@ import Image from "next/image";
 import LandingPage from "@/components/LandingPage";
 import { CardWithForm } from "@/components/CardWithForm";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { Progress } from "@/components/ui/progress"
 import { CreateTaskPopover } from "@/components/CreateTaskPopover";
 import { CreateTaskDialog } from "@/components/CreateTaskDialog";
@@ -19,13 +19,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
-import { TaskCard } from "./dashboard/tasks/taskCard";
+import { TaskCard } from "./taskCard";
 import { UpdateTask } from "@/components/UpdateTask";
 import { FileIcon } from "lucide-react";
 import Link from "next/link";
 
 
-export default function Home() {
+export default function TasksPage() {
   const organization = useOrganization();
   const user = useUser()
   let orgId: string | undefined = undefined;
@@ -46,7 +46,6 @@ export default function Home() {
             <h1 className=" font-bold text-3xl text-indigo-600">Tasks</h1>
             <CreateTaskDialog />
           </div>
-          <div className="flex ">
             
 
             <div className="w-full grid grid-cols-3 gap-4">
@@ -54,7 +53,6 @@ export default function Home() {
                 return <TaskCard key={Task._id} Task={Task} />
               })}
             </div>
-          </div>
 
 
         </div></SignedIn>
